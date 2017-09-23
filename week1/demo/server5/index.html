@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <input type="text" name="message" /> <button>Send</button>
+        <div class="chatlog">Chat Log</div>
+        
+        
+        <script type="text/javascript">
+            
+            
+            var ws = new WebSocket('ws://localhost:3000', 'echo-protocol'),
+                chatLog = document.querySelector('.chatlog'),
+                message = document.querySelector('input[name="message"]');
+            
+            
+            document.querySelector('button').addEventListener('click', sendMessage);
+            
+            function sendMessage() {
+                ws.send(message.value);
+            }
+            
+            
+            ws.addEventListener("open", function (event) {
+                 chatLog.insertAdjacentHTML('beforeend', '<br /> Connection Made'); 
+            });
+
+            
+            ws.addEventListener("message", function(e) {
+                // The data is simply the message that we're sending back
+                var msg = e.data;
+
+                // Append the message
+                chatLog.insertAdjacentHTML('beforeend', '<br />' + msg);
+            });
+            
+            
+        </script>
+    </body>
+</html>
