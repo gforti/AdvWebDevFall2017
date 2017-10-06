@@ -1,6 +1,6 @@
 # Week 2 How To Guide
 
-Start by opening the portable node.js console then enter this command. (without the $)
+Start by opening the portable node.js console then enter this command. (`without the $`)
 
 ```sh
 $ npm install express-generator -g
@@ -53,14 +53,14 @@ install the dependencies entering the command
 - cd demo && npm install
 ```
 
-### To make changes without having to reset the server we will use nodemon (node monitor)
+### To make changes without having to reset the server we will use `nodemon` (node monitor)
 
 in the demo directory enter
 ```sh
 $ npm install nodemon --save
 ```
 
-in the package.json lets add this to the scripts
+in the `package.json` lets add this to the scripts
 
 ```sh
 "dev": "SET DEBUG=demo:* & nodemon ./bin/www"
