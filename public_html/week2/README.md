@@ -53,21 +53,7 @@ install the dependencies entering the command
 - cd demo && npm install
 ```
 
-### Difference between Morgan and Debug
-
-| Morgan | Debug |
-| ------ | ------ |
-| It is for automated logging of requests, responses and related data. | works more like console.log but uses std error (stderr) to output messages. |
-
-```sh
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
-
-// parse application/json
-app.use(bodyParser.json())
-```
-
-### To make changes and have the server reset on the fly we will use nodemon (node monitor)
+### To make changes without having to reset the server we will use nodemon (node monitor)
 
 in the demo directory enter
 ```sh
@@ -79,15 +65,40 @@ in the package.json lets add this to the scripts
 ```sh
 "dev": "SET DEBUG=demo:* & nodemon ./bin/www"
 ```
+now we can start the server with the following command to begin development
 
 ```sh
 $ npm run dev
 ```
+
 "nodemonConfig": {
 "verbose": true,
 "ignore": ["public/*"]
 }
 
+### Difference between Morgan and Debug
+
+| Morgan | Debug |
+| ------ | ------ |
+| It is for automated logging of requests, responses and related data. | works more like console.log but uses std error (stderr) to output messages. |
+
+### Middleware
+```sh
+// set the app to auto log request and reponse values
+app.use(logger('dev'));
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+// a middleware function with no mount path. This code is executed for every request to the router
+app.use(function (req, res, next) {
+  debug('Time:', Date.now())
+  next()
+})
+```
  
 | Request Method | Info |
 | ------ | ------ |
