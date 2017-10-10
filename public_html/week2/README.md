@@ -57,24 +57,29 @@ install the dependencies entering the command
 
 in the demo directory enter
 ```sh
-$ npm install nodemon --save
+$ npm install nodemon --save-dev
 ```
 
-in the `package.json` lets add this to the scripts
+> The `--save` will update the `package.json` file with the install module.  Adding `-dev` will save it as a development dependency which is not for production use.
+
+in the `package.json` lets add this to the scripts json
 
 ```sh
 "dev": "SET DEBUG=demo:* & nodemon ./bin/www"
 ```
-now we can start the server with the following command to begin development
+Now we can start the server with the following command to begin development
 
 ```sh
 $ npm run dev
 ```
+> if you wanted to configure more options for `nodemon` you can add the following config to the  `package.json ` file.
 
+```sh
 "nodemonConfig": {
-"verbose": true,
-"ignore": ["public/*"]
+  "verbose": true,
+  "ignore": ["public/*"]
 }
+```
 
 ### Difference between Morgan and Debug
 
