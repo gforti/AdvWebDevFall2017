@@ -6,7 +6,7 @@ Start by opening the portable node.js console then enter this command. (`without
 $ npm install express-generator -g
 ```
 
-> :point_up: This will install the express generator globally.
+> This will install the express generator globally.
 
 
 To see a list of packages installed globally use this command.
@@ -21,7 +21,7 @@ Under your week2 folder at the root enter this command.
 $ express --view=pug demo
 ```
 
-> :point_up: This will create an express application with the view engine pug in a folder called demo
+> This will create an express application with the view engine pug in a folder called demo
 
 You will see the following output
 ```sh
@@ -72,7 +72,7 @@ Now we can start the server with the following command to begin development
 ```sh
 $ npm run dev
 ```
-> :point_up: If you wanted to configure more options for `nodemon` you can add the following config to the  `package.json ` file.
+> If you wanted to configure more options for `nodemon` you can add the following config to the  `package.json ` file.
 
 ```sh
 "nodemonConfig": {
