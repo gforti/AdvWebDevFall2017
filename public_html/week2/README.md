@@ -60,7 +60,7 @@ in the demo directory enter
 $ npm install nodemon --save-dev
 ```
 
-> :point_up: The `--save` will update the `package.json` file with the install module.  Adding `-dev` will save it as a development dependency which is not for production use.
+> The `--save` will update the `package.json` file with the install module.  Adding `-dev` will save it as a development dependency which is not for production use.
 
 in the `package.json` lets add this to the scripts json
 
