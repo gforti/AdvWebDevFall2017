@@ -144,6 +144,7 @@ block content
 ### Update the following file
 
 #### routes\index.js
+> Add the following code
 ```sh
 router.get('/form', function(req, res, next) {
     
@@ -173,4 +174,8 @@ router.get('/form', function(req, res, next) {
     }   
 });
 ```
-
+#### public\stylesheets\style.css
+> Update the body tag
+```sh
+background-color: #d9edf7;
+```
