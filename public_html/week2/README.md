@@ -115,6 +115,13 @@ app.use(function (req, res, next) {
  
  ### views\form.pug
  ```sh
+ extends layout
+
+block content
+ h1=title
+ p
+    a(href="./") Index
+ h2=message
  form.form-horizontal(action="/form", method="post", role="form")
         .form-group
           label.control-label(for="name") Author         
