@@ -52,10 +52,15 @@ run the app:
 install the dependencies entering the command 
 - cd demo && npm install
 ```
+> Make sure to run the command that will install the dependencies
+
+```sh
+$ cd demo && npm install
+```
 
 ### To make changes without having to reset the server we will use `nodemon` (node monitor)
 
-in the demo directory enter
+> in the `demo` directory enter
 ```sh
 $ npm install nodemon --save-dev
 ```
