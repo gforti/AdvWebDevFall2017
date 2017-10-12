@@ -113,7 +113,7 @@ app.use(function (req, res, next) {
 | req.body | form information |
 
  
- ### Add the following files
+ ### Add to the following file(s)
  
  #### views\form.pug
  ```sh
@@ -141,7 +141,7 @@ block content
     p
         a(href="./form") Back
 ```
-### Update the following file
+### Update the following file(s)
 
 #### routes\index.js
 > Add the following code
