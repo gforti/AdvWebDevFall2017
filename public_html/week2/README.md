@@ -113,7 +113,9 @@ app.use(function (req, res, next) {
 | req.body | form information |
 
  
- ### views\form.pug
+ ### Add the following files
+ 
+ #### views\form.pug
  ```sh
  extends layout
 
@@ -128,8 +130,20 @@ block content
             input#name.form-control(name="author")        
         input(type="submit" value="Submit")
 ```
+#### views\results.pug
+```sh
+extends layout
 
-### routes\index.js
+block content
+    h1=title
+    p
+        strong #{author}
+    p
+        a(href="./form") Back
+```
+### Update the following file
+
+#### routes\index.js
 ```sh
 router.get('/form', function(req, res, next) {
     
