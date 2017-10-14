@@ -23,7 +23,7 @@ $ express --view=pug demo
 
 > This will create an express application with the view engine pug in a folder called demo
 
-> ##### If you want to use a preprocesser for `CSS` like `SaSS` use the following command instead.
+> #### If you want to use a preprocesser for `CSS` like `SaSS` use the following command instead.
 
 ```sh
 express --view=pug --css=sass demo
