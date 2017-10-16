@@ -23,7 +23,7 @@ $ express --view=pug folder-name
 > #### If you want to use a preprocesser for `CSS` like `SaSS` use the following command instead.
 
 ```sh
-express --view=pug --css=sass folder-name
+$ express --view=pug --css=sass folder-name
 ```
 
 > Make sure to run the command that will install the dependencies
