@@ -11,4 +11,23 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express', results : results });
 });
 
+
+router.get('/form', function(req, res, next) {
+  res.render('form', { title: 'Gabriel' });
+});
+
+router.post('/form', function(req, res, next) {
+    
+ req.checkBody('email', 'Email required').notEmpty();
+ 
+ //Trim and escape the name field. 
+    req.sanitize('email').escape();
+    req.sanitize('email').trim();
+    
+    //Run the validators
+var errors = req.validationErrors();
+    
+  res.render('form', { title: req.body.email, errors: errors });
+});
+
 module.exports = router;
