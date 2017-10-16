@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/form', function(req, res, next) {
-  res.render('form', { title: 'Gabriel' });
+  res.render('form', { title: 'Form Page' });
 });
 
 router.post('/form', function(req, res, next) {
