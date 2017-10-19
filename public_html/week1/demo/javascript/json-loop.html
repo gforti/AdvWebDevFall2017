@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>View the developer console</div>
+        
+        <script type="text/javascript">
+            
+            // arr[0].Doors
+            var arr = [
+                {'Doors' : 3, 'Rooms' : 5 },
+                {'Doors' : 4, 'Rooms' : 3 },
+                {'Doors' : 7, 'Rooms' : 9 }
+            ]
+            /* Notice how we access the array index which is a json object. 
+             * we then can use the period notation to access the variable we want
+             * Remember that it is case sensitive.
+             * arr[0].Rooms = 5
+             */
+            for (let index in arr) {
+                console.log(`Home ${index} has ${arr[index].Doors} doors and ${arr[index].Rooms} rooms.`)
+            }        
+            
+        </script>   
+        
+    </body>
+</html>
