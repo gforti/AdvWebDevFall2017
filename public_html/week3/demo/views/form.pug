@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h2= title
+    form(action="/form", method="post")
+        label Email 
+        input(type="text", name="email")
+        input(type="submit")
+
+    if errors 
+      ul
+        for error in errors
+          li!= error.msg

@@ -1,0 +1,27 @@
+extends layout
+
+block content
+ h1=title
+ p
+    a(href="../view") View
+ h2=message
+ form(action="/update", method="post", role="form")
+        .form-group
+          label.control-label(for="name") Name
+          .col
+            input#name.form-control(name="name" value=results.author)
+        .form-group
+          label.control-label(for="rating") Rating
+          .col
+            select#rating.form-control.input-sm(name="rating")
+              option(selected=results.rating == "5") 5
+              option(selected=results.rating == "4") 4
+              option(selected=results.rating == "3") 3
+              option(selected=results.rating == "2") 2
+              option(selected=results.rating == "1") 1
+        .form-group
+          label.control-label(for="review") Review
+          .col
+            textarea#review.form-control(name="review", rows="5") #{results.reviewText}
+        input(type="hidden" name="_id" value=results._id)
+        input(type="submit" value="Add my review") 

@@ -8,10 +8,6 @@ http.createServer(function (request, response) {
     
     var pathName = url.parse(request.url).pathname;
     var fileName = pathName.substr(1); /* lets remove the "/" from the name */
-    
-    if ( fileName === 'index') {
-        fileName = 'index.html';
-    }
 
     /* lets try to read the html page found */
     fileSystem.readFile(fileName , callback);

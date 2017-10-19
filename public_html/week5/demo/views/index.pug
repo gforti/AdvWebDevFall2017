@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  h1= title
+  p
+    a(href="./view") View
+  h2=message
+  form.form-horizontal(action="/", method="post", role="form")
+        .form-group
+          label.control-label(for="name") Name
+          .col
+            input#name.form-control(name="name")
+        .form-group
+          label.control-label(for="rating") Rating
+          .col
+            select#rating.form-control.input-sm(name="rating")
+              option 5
+              option 4
+              option 3
+              option 2
+              option 1
+        .form-group
+          label.control-label(for="review") Review
+          .col
+            textarea#review.form-control(name="review", rows="5")
+        input(type="submit" value="Add my review") 

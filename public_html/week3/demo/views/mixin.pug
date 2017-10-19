@@ -1,0 +1,28 @@
+mixin outputReviews(results)
+    table(border="1")
+        thead   
+            tr
+                th Author
+                th Rating
+                th Review Text
+                th Created On
+        tbody
+          each stuff in results
+            tr
+                td 
+                    = stuff.author
+                td 
+                    = stuff.rating
+                td 
+                    = stuff.reviewText
+                td 
+                    +formatDate(stuff.createdOn)           
+
+mixin formatDate(dateString)
+  -var date = new Date(dateString);
+  -var d = date.getDate();
+  -var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+  -var m = monthNames[date.getMonth()];
+  -var y = date.getFullYear();
+  -var output = `${m} ${d}, ${y}`;
+  =output

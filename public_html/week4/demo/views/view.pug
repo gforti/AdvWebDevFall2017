@@ -1,0 +1,34 @@
+extends layout
+
+block content
+    h1=title
+    p
+        a(href="../") Home
+    p=removed
+    if results.length
+        table(border="1")
+            thead   
+                tr
+                    th author
+                    th rating
+                    th reviewText
+                    th createdOn
+                    th
+                    th
+            tbody
+              each stuff in results
+                tr
+                    td 
+                        =stuff.author
+                    td 
+                        =stuff.rating
+                    td 
+                        =stuff.reviewText
+                    td 
+                        =stuff.createdOn.toDateString()
+                    td
+                        a(href="../update/"+stuff._id) Update
+                    td
+                        a(href="../view/"+stuff._id) Delete
+    else
+        p No results found
