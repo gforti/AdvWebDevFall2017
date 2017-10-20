@@ -38,7 +38,7 @@ $ cd folder-name && npm install
 $ npm install mongoose --save
 ```
 
-### To make changes without having to reset the server we will use `nodemon` (node monitor)
+### Install Nodemon (node monitor)
 
 In the `[folder-name]` directory enter
 ```sh
@@ -47,7 +47,7 @@ $ npm install nodemon --save-dev
 
 in the `package.json` lets add this to the scripts json
 
-```sh
+```js
 "dev": "SET DEBUG=folder-name:* & nodemon ./bin/www"
 ```
 Now we can start the server with the following command to begin development
@@ -56,3 +56,25 @@ Now we can start the server with the following command to begin development
 $ npm run dev
 ```
 
+### Express Debug
+
+https://www.npmjs.com/package/express-debug
+
+Install
+
+```sh
+$ npm install express-debug --save-dev
+```
+
+In the code `app.js` add this before `module.exports = app;`
+
+```js
+  ...
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+require('express-debug')(app);
+
+module.exports = app;
+```
