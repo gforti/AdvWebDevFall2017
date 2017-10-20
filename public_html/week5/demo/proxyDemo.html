@@ -73,7 +73,7 @@
                 let verb = verbfield.options[verbfield.selectedIndex].value;
                 let resource = document.querySelector('input[name="resource"]').value;                         
                 let results = document.querySelector('textarea[name="results"]');
-                let url = 'http://localhost:3001/api/v1/' + resource;
+                let url = `http://localhost:3001/api/v1/${resource}`;
                                                
                 let myHeaders = new Headers();
                 myHeaders.set('Content-Type', 'application/json');
