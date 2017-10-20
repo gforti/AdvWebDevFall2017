@@ -85,7 +85,7 @@ $ npm run dev
 ```
 > If you wanted to configure more options for `nodemon` you can add the following config to the  `package.json ` file.
 
-```sh
+```js
 "nodemonConfig": {
   "verbose": true,
   "ignore": ["public/*"]
@@ -99,7 +99,7 @@ $ npm run dev
 | It is for automated logging of requests, responses and related data. | works more like console.log but uses std error (stderr) to output messages. |
 
 ### Middleware
-```sh
+```js
 // set the app to auto log request and reponse values
 app.use(logger('dev'));
 
@@ -127,7 +127,7 @@ app.use(function (req, res, next) {
  ### Add to the following file(s)
  
  #### views\form.pug
- ```sh
+ ```html
  extends layout
 
 block content
@@ -142,7 +142,7 @@ block content
         input(type="submit" value="Submit")
 ```
 #### views\results.pug
-```sh
+```html
 extends layout
 
 block content
@@ -156,7 +156,7 @@ block content
 
 #### routes\index.js
 > Add the following code
-```sh
+```js
 router.get('/form', function(req, res, next) {
     
     var msg = '';
@@ -187,6 +187,6 @@ router.get('/form', function(req, res, next) {
 ```
 #### public\stylesheets\style.css
 > Update the body tag
-```sh
+```css
 background-color: #d9edf7;
 ```
