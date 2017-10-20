@@ -92,6 +92,12 @@ $ npm run dev
 }
 ```
 
+#### public\stylesheets\style.css
+> Update the `body` tag to see nodemon picup the changes
+```css
+background-color: #d9edf7;
+```
+
 ### Difference between Morgan and Debug
 
 | Morgan | Debug |
@@ -185,8 +191,4 @@ router.get('/form', function(req, res, next) {
     }   
 });
 ```
-#### public\stylesheets\style.css
-> Update the body tag
-```css
-background-color: #d9edf7;
-```
+
