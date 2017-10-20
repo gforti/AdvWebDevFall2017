@@ -21,7 +21,7 @@ https://www.npmjs.com/package/express-debug
 Install
 
 ```sh
-npm install express-debug --save-dev
+$ npm install express-debug --save-dev
 ```
 
 In the code `app.js` add this before `module.exports = app;`
