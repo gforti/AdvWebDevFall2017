@@ -2,9 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
+        <title>Proxy Demo</title>
         <style type="text/css">
             textarea {
                 width: 500px;
@@ -15,9 +13,11 @@
                  height: 300px;
             }
         </style>
+    </head>
+    <body>        
         
         <h1>Rest API Demo</h1>
-        
+
         Verb/HTTP Method:<br />
         <select name="verb">
             <option value="GET">GET</option>
@@ -31,20 +31,23 @@
         <input name="resource" value="reviews/" />
         <br />
         <br />
-        Data(optional):<br />   
+        
+        Data(optional):<br />  
+        
         Author <input type="text" name="author" value="" />
         <br />
         Rating <input type="text" name="rating" list="ratings" placeholder="5">        
         <br />
         Review Text <input type="text" name="reviewText" >
+                
         <br />
         <br />
         <button>Make Call</button>
         <h3>Results</h3>
-        
+
         <textarea name="results"></textarea>
-        
-         <datalist id="ratings">
+
+        <datalist id="ratings">
             <option value="1">
             <option value="2">
             <option value="3">
@@ -54,21 +57,22 @@
         
         <script type="text/javascript">
         
-            var callBtn = document.querySelector('button');
-            
+            var callBtn = document.querySelector('button');            
             callBtn.addEventListener('click', makeCall);
         
             function makeCall() {
-                let verbfield = document.querySelector('select[name="verb"]');
-                let verb = verbfield.options[verbfield.selectedIndex].value;
-                let resource = document.querySelector('input[name="resource"]').value;
+                
                 let data = {
                     'author' : document.querySelector('input[name="author"]').value,
                     'rating' : document.querySelector('input[name="rating"]').value,
                     'reviewText' : document.querySelector('input[name="reviewText"]').value
-                };            
+                };   
+                
+                
+                let verbfield = document.querySelector('select[name="verb"]');
+                let verb = verbfield.options[verbfield.selectedIndex].value;
+                let resource = document.querySelector('input[name="resource"]').value;                         
                 let results = document.querySelector('textarea[name="results"]');
-
                 let url = 'http://localhost:3001/api/v1/' + resource;
                                                
                 let myHeaders = new Headers();
@@ -76,7 +80,9 @@
                 let myInit = { method: verb,                                
                                headers: myHeaders,
                                mode: 'cors',
-                               cache: 'default' };
+                               cache: 'default' 
+                             };
+                             
                 if ( ['POST', 'PUT'].indexOf(verb) > -1 ) {
                     myInit.body = JSON.stringify(data)
                 }
@@ -99,8 +105,6 @@
                 });              
                  
             }
-               
-            
         </script>
     </body>
 </html>
