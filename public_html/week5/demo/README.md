@@ -13,3 +13,5 @@ Now we can start the server with the following command to begin development
 ```sh
 $ npm run dev
 ```
+
+> Run `proxyDemo.html` as it's own page, it is not part of the express project
