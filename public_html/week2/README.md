@@ -122,7 +122,7 @@ app.use(function (req, res, next) {
 });
 ```
 
-> The idea of middle ware in express is to update the request and responses as you see fit
+> The idea of middleware in express is to update the request and responses as you see fit
  
 ### Working with route data
 | Request Method | Info |
