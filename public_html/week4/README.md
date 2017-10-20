@@ -56,11 +56,10 @@ Now we can start the server with the following command to begin development
 $ npm run dev
 ```
 
-### Express Debug
+### Install Express Debug
 
 https://www.npmjs.com/package/express-debug
 
-Install
 
 ```sh
 $ npm install express-debug --save-dev
