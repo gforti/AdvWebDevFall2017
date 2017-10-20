@@ -106,21 +106,23 @@ background-color: #d9edf7;
 
 ### Middleware
 ```js
-// set the app to auto log request and reponse values
+// set the app to auto log request and response values
 app.use(logger('dev'));
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // a middleware function with no mount path. This code is executed for every request to the router
 app.use(function (req, res, next) {
-  debug('Time:', Date.now())
-  next()
-})
+  debug('Time:', Date.now());
+  next();
+});
 ```
+
+> The idea of middle ware in express is to update the request and responses as you see fit
  
 ### Working with route data
 | Request Method | Info |
