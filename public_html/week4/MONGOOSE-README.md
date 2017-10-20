@@ -2,7 +2,7 @@
 
 ## Mongoose Schema
 
-```sh
+```js
 var mongoose = require('mongoose');
 
 var reviewSchema = new mongoose.Schema({
@@ -28,7 +28,7 @@ module.exports = Review;
 ## Mongoose CRUD Operations
 
 ### Create
-```sh
+```js
 var Review = require('../models/review');
 
 Review.create({
@@ -46,7 +46,7 @@ function successCB(){
 ```
 
 ### Read-All
-```sh
+```js
 var Review = require('../models/review');
 
 Review
@@ -60,7 +60,7 @@ Review
 ```
 
 ### Read-One
-```sh
+```js
 var Review = require('../models/review');
 
 /* this params needs to be from the request object in express */
@@ -84,7 +84,7 @@ Review
 ```
 
 ### Update
-```sh
+```js
 var Review = require('../models/review');
 
 var id = req.params.id;
@@ -107,7 +107,7 @@ if (req.method === 'POST') {
 ```
 
 ### Delete
-```sh
+```js
 var Review = require('../models/review');
 
 var id = req.params.id;
