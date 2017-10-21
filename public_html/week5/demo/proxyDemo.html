@@ -44,8 +44,9 @@
         <br />
         <button>Make Call</button>
         <h3>Results</h3>
-
-        <textarea name="results"></textarea>
+        <input name="query" size="70" readonly />
+        <br />
+        <textarea name="results" readonly></textarea>
 
         <datalist id="ratings">
             <option value="1">
@@ -74,7 +75,9 @@
                 let resource = document.querySelector('input[name="resource"]').value;                         
                 let results = document.querySelector('textarea[name="results"]');
                 let url = `http://localhost:3001/api/v1/${resource}`;
-                                               
+                   
+                document.querySelector('input[name="query"]').value = url;
+                
                 let myHeaders = new Headers();
                 myHeaders.set('Content-Type', 'application/json');
                 let myInit = { method: verb,                                

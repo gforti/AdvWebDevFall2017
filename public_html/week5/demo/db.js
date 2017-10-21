@@ -11,6 +11,8 @@ mongoose.connect(dbURI, {
   /* other options */
 });
 
+mongoose.Promise = Promise;
+
 // CONNECTION EVENTS
 mongoose.connection.on('connected', function() {
     debug('Mongoose connected to ' + dbURI);
