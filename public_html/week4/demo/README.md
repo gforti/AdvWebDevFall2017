@@ -11,7 +11,9 @@ $ npm install
 Now we can start the server with the following command to begin development
 
 ```sh
-$ npm run dev
+$ npm run dev:pc
+or
+$ npm run dev:mac
 ```
 
 ## Install Express Debug
