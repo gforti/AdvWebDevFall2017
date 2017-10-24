@@ -77,7 +77,7 @@ in the `package.json` lets add this to the scripts json
 
 ```sh
 "dev:pc": "SET DEBUG=demo:* & nodemon ./bin/www",
- "dev:mac": "DEBUG=demo:* nodemon ./bin/www"
+"dev:mac": "DEBUG=demo:* nodemon ./bin/www"
 ```
 Now we can start the server with the following command to begin development
 
