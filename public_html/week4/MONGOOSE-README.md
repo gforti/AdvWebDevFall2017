@@ -33,7 +33,8 @@ module.exports = Review;
 ```js
 var Review = require('../models/review');
 
-Review.create({
+Review
+    .create({
         data1: 'data1',
         data2: 'data2',
         data3: 'data3'
@@ -94,21 +95,21 @@ if (req.method === 'POST') {
 
     id = req.body._id;
     Review
-    .findById(id)
-    .exec()
-    .then(function(reviewData) {        
-        reviewData.author = req.body.author;
-        reviewData.rating = req.body.rating;
-        reviewData.reviewText = req.body.reviewText;
+        .findById(id)
+        .exec()
+        .then(function(reviewData) {        
+            reviewData.author = req.body.author;
+            reviewData.rating = req.body.rating;
+            reviewData.reviewText = req.body.reviewText;
 
-        return reviewData.save();
-    })
-    .then(function(data){
-         debug('Document Updated');
-    })
-    .catch(function(err){
-        debug('Document Not Updated');
-    });
+            return reviewData.save();
+        })
+        .then(function(data){
+             debug('Document Updated');
+        })
+        .catch(function(err){
+            debug('Document Not Updated');
+        });
 }
 ```
 
@@ -118,12 +119,13 @@ var Review = require('../models/review');
 
 var id = req.params.id;
 
-Review.remove({ _id: id })
-.then(function(){            
-   debug('Document Deleted');
-})
-.catch(function(err) {            
-   debug('Document NOT Deleted');
-});     
+Review
+    .remove({ _id: id })
+    .then(function(){            
+       debug('Document Deleted');
+    })
+    .catch(function(err) {            
+       debug('Document NOT Deleted');
+    });     
 
 ```
