@@ -25,24 +25,27 @@ var Review = mongoose.model('Review', reviewSchema);
 module.exports = Review;
 ```
 
+> mongoose.model will create the table name `Review` 
+
 ## Mongoose CRUD Operations
 
 ### Create
 ```js
 var Review = require('../models/review');
 
-Review.create({
+Review
+    .create({
         data1: 'data1',
         data2: 'data2',
         data3: 'data3'
-    },function (err) {           
-        /* saved! Callbacks are optional */
-        successCB();
+    })
+    .then(function(){
+         debug('Success!');
+    })
+    .catch(function(){
+         debug('Fail!');
     });
 
-function successCB(){
-    debug('Success!');
-}
 ```
 
 ### Read-All
@@ -51,7 +54,8 @@ var Review = require('../models/review');
 
 Review
     .find()
-    .exec(function(err, results){    
+    .exec()
+    .then(function(results){
         /* a way to send the results to the view */
         res.render('view', {               
             allResults : results,
@@ -68,18 +72,17 @@ var Review = require('../models/review');
 
 Review
     .findOne({ '_id': id })
-    .exec(function(err, results){
-        /* a way to send the results to the view if found */
-         if ( results ) {
-            res.render('update', { 
-                message: 'Update Results',
-                results : results
-            });
-        } else {
-             res.render('notfound', { 
-                message: 'Sorry ID not found'
-            });
-        }           
+    .exec()
+    .then(function(results){
+        res.render('update', { 
+            message: 'Update Results',
+            results : results
+        });
+    })
+    .catch(function(){
+        res.render('notfound', { 
+            message: 'Sorry ID not found'
+        });
     });
 ```
 
@@ -91,18 +94,22 @@ var id = req.params.id;
 if (req.method === 'POST') {
 
     id = req.body._id;
-    var query = { '_id': req.body._id };
-    
-    var update = {
-        data1: req.body.data1,
-        data2: req.body.data2,
-        data3: req.body.data3
-    };
-   
-   var options = {};
-   var callback = function(){};
-   
-   Review.update(query, update, options, callback);
+    Review
+        .findById(id)
+        .exec()
+        .then(function(reviewData) {        
+            reviewData.author = req.body.author;
+            reviewData.rating = req.body.rating;
+            reviewData.reviewText = req.body.reviewText;
+
+            return reviewData.save();
+        })
+        .then(function(data){
+             debug('Document Updated');
+        })
+        .catch(function(err){
+            debug('Document Not Updated');
+        });
 }
 ```
 
@@ -112,12 +119,13 @@ var Review = require('../models/review');
 
 var id = req.params.id;
 
-Review.remove({ _id: id }, function(err) {
-    if (!err) {
-        /* Document Deleted */
-    }
-    else {
-        /* Document NOT Deleted */
-    }
-});
+Review
+    .remove({ _id: id })
+    .then(function(){            
+       debug('Document Deleted');
+    })
+    .catch(function(err) {            
+       debug('Document NOT Deleted');
+    });     
+
 ```
