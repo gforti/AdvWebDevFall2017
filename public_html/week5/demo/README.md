@@ -16,5 +16,6 @@ $ npm run dev:pc
 or
 ```sh
 $ npm run dev:mac
+```
 
 > Run `proxyDemo.html` as it's own page, it is not part of the express project
