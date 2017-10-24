@@ -76,12 +76,17 @@ $ npm install nodemon --save-dev
 in the `package.json` lets add this to the scripts json
 
 ```sh
-"dev": "SET DEBUG=demo:* & nodemon ./bin/www"
+"dev:pc": "SET DEBUG=demo:* & nodemon ./bin/www",
+ "dev:mac": "DEBUG=demo:* nodemon ./bin/www"
 ```
 Now we can start the server with the following command to begin development
 
 ```sh
-$ npm run dev
+$ npm run dev:pc
+```
+or
+```sh
+$ npm run dev:mac
 ```
 > If you wanted to configure more options for `nodemon` you can add the following config to the  `package.json ` file.
 
