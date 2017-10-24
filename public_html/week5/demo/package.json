@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "SET PORT=3001 & node ./bin/www",
-    "dev": "SET DEBUG=demo:* & SET PORT=3001 & nodemon ./bin/www"
+    "dev:pc": "SET DEBUG=demo:* & SET PORT=3001 & nodemon ./bin/www",
+    "dev:mac": "DEBUG=demo:* PORT=3001 nodemon ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
