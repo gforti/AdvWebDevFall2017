@@ -62,12 +62,14 @@
                     this.loading = document.querySelector('div.loading').classList
                     this.model = new Model()
                     this.view = new View()
+                    this.controller = new Controller(this.model, this.view)
                     
                     window.addEventListener('hashchange', ()=>{
                         this.loadingStart()
-                        new Controller(this.model, this.view)[`${window.location.hash.slice(1)}`]()
+                        this.model.dataBind = {}
+                        this.controller[`${window.location.hash.slice(1)}`]()
                             .then((html)=>{
-                                this.renderContent(html).parseEvents().bindModelText()
+                                this.renderContent(html).bindModelText().parseEvents().twoWayFormBind()
                                 this.loadingEnd()
                             })
                     })
@@ -75,6 +77,12 @@
                     if ( typeof route === 'string') {
                         window.location.hash = route
                     }
+                }
+                
+                update(evt, funcName){
+                    this.controller[funcName](evt).then(()=>{
+                        this.bindModelText().parseEvents().twoWayFormBind()
+                    }) 
                 }
                                 
                 loadingStart() {
@@ -93,40 +101,19 @@
                 }
                 
                 parseEvents() {
-                    let contents = document.querySelectorAll('*[data-event]')                    
+                    let contents = this.content.querySelectorAll('*[data-event]')                    
                     contents.forEach( domElem => {
                         const [evtName, funcName] = domElem.dataset.event.split(':')
-                        domElem.addEventListener(evtName, evt => this.model[funcName](evt) )
+                        domElem.addEventListener(evtName, evt => {
+                            return this.update(evt, funcName)
+                        })
+                        delete domElem.dataset.event
                     })                                          
                     return this
                 }
                 
-                bindModelText() {
-                    let contents = document.querySelectorAll('*[data-bindText],input[name], select[name]')
-                    const obj = this.model.dataBind
-                    if (contents) {
-                        contents.forEach( domElem => {
-                            const property = domElem.name || domElem.dataset.bindtext
-                            const selector = `*[data-bindText="${property}"],input[name="${property}"], select[name="${property}"]`
-                            let val
-                            Object.defineProperty(obj, property, {
-                                get: function() { return val }, 
-                                set: function(newValue) { 
-                                    let elems = document.querySelectorAll(selector)
-                                    val = newValue 
-                                    if (elems) {
-                                        elems.forEach(elem => {
-                                            if ('value' in elem) elem.value = val
-                                            else if ('innerText' in elem) elem.innerText = val
-                                        })
-                                    }
-                                },
-                                configurable: true
-                            });
-                        })
-                    }
-                    
-                    let form = document.querySelector('form')
+                twoWayFormBind() {
+                    let form = this.content.querySelector('form[data-bindall]')
                     if (form) {
                         form.addEventListener('change', (event) => {
                             const target = event.target
@@ -135,41 +122,84 @@
                               this.model.dataBind[property] = target.value                              
                             }
                         })
-                    }                    
+                        delete form.dataset.bindall
+                    } 
+                    
+                    return this
+                }
+                
+                bindModelText() {
+                    let contents = this.content.querySelectorAll('*[data-bindtext],input[name], select[name]')
+                    const obj = this.model.dataBind
+                    if (contents) {
+                        contents.forEach( domElem => {
+                            const property = domElem.name || domElem.dataset.bindtext
+                            const selector = `*[data-bindText="${property}"],input[name="${property}"], select[name="${property}"]`
+                            let val       
+                            if ( obj[property] ) {
+                                val = obj[property]
+                                if ('value' in domElem) domElem.value = val
+                                else if ('innerHTML' in domElem) domElem.innerHTML = val
+                            } 
+                            Object.defineProperty(obj, property, {
+                                get: function() { return val }, 
+                                set: function(newValue) { 
+                                    let elems = document.querySelectorAll(selector)
+                                    val = newValue
+                                    if (elems) {
+                                        elems.forEach(elem => {
+                                            if ('value' in elem) elem.value = val
+                                            else if ('innerHTML' in elem) elem.innerHTML = val
+                                        })
+                                    }
+                                },
+                                configurable: true
+                            });
+                            
+                            
+                        })
+                    }
+                    
+                                    
                     return this
                   }
+                  
                                
             }
             
             
             
             class View {
-                           
-                resultsTable(data) {
+                
+                resultsData(data){
                     if ( ! Array.isArray(data) ) return ''
-                    const html = `<table>
+                    return `${data.map(row=>                                         
+                                `<tr>
+                                    <td>${row.author}</td>
+                                    <td>${row.rating}</td>
+                                    <td>${row.reviewText}</td>
+                                    <td><button data-id="${row._id}" data-event="click:deleteReview">Delete</button></td>
+                                </tr>`
+                            ).join('')}`
+                }
+                           
+                resultsTable() {                    
+                    const html = `<p data-bindtext="deleteResultMsg"></p>
+                                  <table>
                                     <thead>
                                         <th>Author</th>
                                         <th>Rating</th>
                                         <th>Review</th>
                                         <th></th>
                                     </thead>
-                                    <tbody>
-                                    ${data.map(row=>                                         
-                                        `<tr>
-                                            <td>${row.author}</td>
-                                            <td>${row.rating}</td>
-                                            <td>${row.reviewText}</td>
-                                            <td><button data-id="${row._id}" data-event="click:deleteReview">Delete</button></td>
-                                        </tr>`
-                                    ).join('')}                
+                                    <tbody data-bindtext="reviewTable">                                                    
                                     </tbody>
                                 </table>`                                
                     return html
                 }  
                 
                 addReviewForm() {                    
-                    const html = `<form>
+                    const html = `<form data-bindall>
                                     <p>
                                         <label>Author</label>
                                         <input type="text" name="author" />
@@ -203,23 +233,38 @@
                         Reviews : 'http://localhost:3001/api/v1/reviews/'
                     }
                     this.dataBind = {}
+                    
+                    this.http = {
+                        get: (url) => {
+                            return this.httpFetch(url, null, 'GET').then( response => response.json())
+                        },
+                        post: (url, data) => {
+                            return this.httpFetch(url, data, 'POST').then( response => response.json())
+                        },
+                        delete: (url) => {
+                            return this.httpFetch(url, null, 'DELETE')
+                        }
+                    }
                 }
                 
                                
-                http(url, data){                    
+                httpFetch(url, data, verb){                    
                     let myHeaders = new Headers()
                     myHeaders.set('Content-Type', 'application/json')
-                    let myInit = { method: data ? 'POST' : 'GET', headers: myHeaders, mode: 'cors', cache: 'default'}                    
+                    let myInit = { method: verb, headers: myHeaders, mode: 'cors', cache: 'default'}                    
                     if ( data ) {
                         myInit.body = JSON.stringify(data)
                     }
                     const myRequest = new Request(url, myInit);                
                     return fetch(myRequest)
-                        .then( response => response.json())
+                            .then(response => {
+                                if (!response.ok) throw Error(response.statusText)
+                                return response;
+                            })                            
                 }
                                                 
                 getReviews() {
-                    return this.http(this.APIS.Reviews)                        
+                    return this.http.get(this.APIS.Reviews)                        
                 }
                 
                 saveReviews() {
@@ -228,15 +273,15 @@
                         rating : this.dataBind.rating,
                         reviewText : this.dataBind.reviewText
                     }                    
-                    return this.http(this.APIS.Reviews, data).then( (data) => {
-                        this.dataBind.saveResultMsg = 'Review Saved'
-                        return data
-                    })                    
+                    return this.http.post(this.APIS.Reviews, data)                   
                 }
                 
                 deleteReview(evt) {
-                    const id = evt.target.dataset.id
-                    console.log(id)
+                    const url = `${this.APIS.Reviews}${evt.target.dataset.id}`
+                    return this.http.delete(url)
+                            .then( () => {
+                                return this.getReviews()
+                            })     
                 }
             }
             
@@ -248,9 +293,13 @@
                     this.View = view                   
                 }
                 
+                
                 home() {
                     return this.Model.getReviews()
-                    .then( data => this.View.resultsTable(data) )
+                    .then( data => {
+                        this.Model.dataBind.reviewTable = this.View.resultsData(data)                           
+                        return this.View.resultsTable() 
+                    })
                 }
                 
                 add() {
@@ -264,6 +313,25 @@
                     return Promise.resolve(html)
                 }
                 
+                saveReviews() {
+                    return this.Model.saveReviews().then( data => {
+                        this.Model.dataBind.saveResultMsg = 'Review Saved'
+                        return data
+                    }).catch( err => {
+                        this.Model.dataBind.saveResultMsg = 'Review NOT Saved'   
+                        return err
+                    })
+                }
+                
+                deleteReview(evt) {
+                    return this.Model.deleteReview(evt).then( ()=>{
+                        this.Model.dataBind.deleteResultMsg = 'Review Deleted'
+                        return this.home()
+                    }).catch( err => {
+                         this.Model.dataBind.deleteResultMsg = 'Review NOT Deleted'
+                         return this.home()
+                    })
+                }
                 
             }
             
