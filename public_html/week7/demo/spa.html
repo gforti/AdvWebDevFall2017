@@ -42,72 +42,233 @@
         
         <div class="loading">Loading&#8230;</div>
         
-        <a href="#home">home</a>
-        <a href="#somecoolfeature">somecoolfeature</a>
-        <a href="#test">test</a>
+        <nav>            
+            <a href="#home">home</a> |
+            <a href="#add">Add Review</a> |
+            <a href="#test">test</a> 
+        </nav>
         <div class="content">TODO write content</div>
         
         
         
         <script>
             
-            /* Routing */ 
-            window.addEventListener('hashchange', () => {
-                document.querySelector('div.content').innerHTML = ''
-                window[`Route${window.location.hash.replace('#','')}`]() 
-            })
             
-            function loadingStart() {
-                document.querySelector('div.loading').classList.add('visable')
+            
+            class SPA {
+                
+                constructor(route) {
+                    this.content = document.querySelector('div.content')
+                    this.loading = document.querySelector('div.loading').classList
+                    this.model = new Model()
+                    this.view = new View()
+                    
+                    window.addEventListener('hashchange', ()=>{
+                        this.loadingStart()
+                        new Controller(this.model, this.view)[`${window.location.hash.slice(1)}`]()
+                            .then((html)=>{
+                                this.renderContent(html).parseEvents().bindModelText()
+                                this.loadingEnd()
+                            })
+                    })
+                    
+                    if ( typeof route === 'string') {
+                        window.location.hash = route
+                    }
+                }
+                                
+                loadingStart() {
+                    this.loading.add('visable')
+                    return this
+                }
+                
+                loadingEnd() {
+                    this.loading.remove('visable')
+                    return this
+                }
+                
+                renderContent(html) {
+                    this.content.innerHTML = html
+                    return this
+                }
+                
+                parseEvents() {
+                    let contents = document.querySelectorAll('*[data-event]')                    
+                    contents.forEach( domElem => {
+                        const [evtName, funcName] = domElem.dataset.event.split(':')
+                        domElem.addEventListener(evtName, evt => this.model[funcName](evt) )
+                    })                                          
+                    return this
+                }
+                
+                bindModelText() {
+                    let contents = document.querySelectorAll('*[data-bindText],input[name], select[name]')
+                    const obj = this.model.dataBind
+                    if (contents) {
+                        contents.forEach( domElem => {
+                            const property = domElem.name || domElem.dataset.bindtext
+                            const selector = `*[data-bindText="${property}"],input[name="${property}"], select[name="${property}"]`
+                            let val
+                            Object.defineProperty(obj, property, {
+                                get: function() { return val }, 
+                                set: function(newValue) { 
+                                    let elems = document.querySelectorAll(selector)
+                                    val = newValue 
+                                    if (elems) {
+                                        elems.forEach(elem => {
+                                            if ('value' in elem) elem.value = val
+                                            else if ('innerText' in elem) elem.innerText = val
+                                        })
+                                    }
+                                },
+                                configurable: true
+                            });
+                        })
+                    }
+                    
+                    let form = document.querySelector('form')
+                    if (form) {
+                        form.addEventListener('change', (event) => {
+                            const target = event.target
+                            const property = target.name
+                            if ( property && target.matches('input') || target.matches('select')) {
+                              this.model.dataBind[property] = target.value                              
+                            }
+                        })
+                    }                    
+                    return this
+                  }
+                               
             }
             
-            function loadingEnd() {
-                document.querySelector('div.loading').classList.remove('visable')
-            }
-               
-              
             
-            function Routehome(){
-                loadingStart()
-                fetch('http://localhost:3001/api/v1/reviews/')
-                .then(function(response) {              
-                      return response.json()               
-                })
-                .then(function(json) { 
-                    document.querySelector('div.content').innerHTML = resultsTable(json)
-                    setTimeout(() => {
-                       loadingEnd()
-                    },1000)
-                   
-                })
+            
+            class View {
+                           
+                resultsTable(data) {
+                    if ( ! Array.isArray(data) ) return ''
+                    const html = `<table>
+                                    <thead>
+                                        <th>Author</th>
+                                        <th>Rating</th>
+                                        <th>Review</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody>
+                                    ${data.map(row=>                                         
+                                        `<tr>
+                                            <td>${row.author}</td>
+                                            <td>${row.rating}</td>
+                                            <td>${row.reviewText}</td>
+                                            <td><button data-id="${row._id}" data-event="click:deleteReview">Delete</button></td>
+                                        </tr>`
+                                    ).join('')}                
+                                    </tbody>
+                                </table>`                                
+                    return html
+                }  
+                
+                addReviewForm() {                    
+                    const html = `<form>
+                                    <p>
+                                        <label>Author</label>
+                                        <input type="text" name="author" />
+                                         <p data-bindtext="author"></p>
+                                    </p>
+                                    <p>
+                                        <label>Rating</label>
+                                        <select name="rating">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </p>
+                                    <p>
+                                        <label>Review</label>
+                                        <input type="text" name="reviewText" />
+                                    </p>
+                                    <p data-bindtext="saveResultMsg"></p>
+                                    <p> <input type="button" value="submit" data-event="click:saveReviews" /> </p>
+                                </form>`                   
+                    return html
+                }
             }
-
-            function Routesomecoolfeature() {
-                console.log('cool')
+            
+            class Model {
+                
+                 constructor() {
+                    this.APIS = {
+                        Reviews : 'http://localhost:3001/api/v1/reviews/'
+                    }
+                    this.dataBind = {}
+                }
+                
+                               
+                http(url, data){                    
+                    let myHeaders = new Headers()
+                    myHeaders.set('Content-Type', 'application/json')
+                    let myInit = { method: data ? 'POST' : 'GET', headers: myHeaders, mode: 'cors', cache: 'default'}                    
+                    if ( data ) {
+                        myInit.body = JSON.stringify(data)
+                    }
+                    const myRequest = new Request(url, myInit);                
+                    return fetch(myRequest)
+                        .then( response => response.json())
+                }
+                                                
+                getReviews() {
+                    return this.http(this.APIS.Reviews)                        
+                }
+                
+                saveReviews() {
+                    const data = {
+                        author : this.dataBind.author,
+                        rating : this.dataBind.rating,
+                        reviewText : this.dataBind.reviewText
+                    }                    
+                    return this.http(this.APIS.Reviews, data).then( (data) => {
+                        this.dataBind.saveResultMsg = 'Review Saved'
+                        return data
+                    })                    
+                }
+                
+                deleteReview(evt) {
+                    const id = evt.target.dataset.id
+                    console.log(id)
+                }
             }
-
-            function Routetest() {
-                console.log('test')
+            
+            
+            class Controller {
+                
+                constructor(model, view) {
+                    this.Model = model
+                    this.View = view                   
+                }
+                
+                home() {
+                    return this.Model.getReviews()
+                    .then( data => this.View.resultsTable(data) )
+                }
+                
+                add() {
+                    const html = this.View.addReviewForm()                    
+                    return Promise.resolve(html)
+                    
+                }
+                
+                test() {
+                    const html = 'test'
+                    return Promise.resolve(html)
+                }
+                
                 
             }
             
-            function resultsTable(json) {
-                
-                let html = '<table>'
-                
-                for (let index in json) {
-                    html += '<tr>'
-                    html += `<td>${json[index].author}</td>`
-                    html += '</tr>'
-                } 
-                
-                html += '</table>'
-                return html
-            }
             
-       
-            
-            
+            new SPA('home')
             
 
             </script>
