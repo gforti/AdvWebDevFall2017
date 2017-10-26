@@ -191,7 +191,7 @@
                     return `<form data-bindall>
                                     <p>
                                         <label>Author</label>
-                                        <input type="text" name="author" />
+                                        <input type="text" name="author" data-event="keyup:updateAuthor" />
                                          <p data-bindtext="author"></p>
                                     </p>
                                     <p>
@@ -308,6 +308,11 @@
                             }).then( () => {
                                 return this.getReviews()
                             })
+                }
+                
+                updateAuthor(evt){
+                    this.dataBind.author = evt.target.value
+                    return Promise.resolve()
                 }
             }
             
