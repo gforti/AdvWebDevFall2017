@@ -1,0 +1,12 @@
+{
+  "name": "spa",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node pack.js"
+  },
+  "devDependencies": {
+    "node-watch": "^0.5.5",
+    "uglify-es": "^3.1.5"
+  }
+}
