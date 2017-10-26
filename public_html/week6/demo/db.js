@@ -19,7 +19,7 @@ mongoose.connection.on('connected', function() {
 });
 mongoose.connection.on('error', function(err) {
     debug('Mongoose connection error: ' + err);
-    process.exit(0);
+     process.exit(0);
 });
 mongoose.connection.on('disconnected', function() {
     debug('Mongoose disconnected');

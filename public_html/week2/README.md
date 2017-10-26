@@ -76,20 +76,31 @@ $ npm install nodemon --save-dev
 in the `package.json` lets add this to the scripts json
 
 ```sh
-"dev": "SET DEBUG=demo:* & nodemon ./bin/www"
+"dev:pc": "SET DEBUG=demo:* & nodemon ./bin/www",
+"dev:mac": "DEBUG=demo:* nodemon ./bin/www"
 ```
 Now we can start the server with the following command to begin development
 
 ```sh
-$ npm run dev
+$ npm run dev:pc
+```
+or
+```sh
+$ npm run dev:mac
 ```
 > If you wanted to configure more options for `nodemon` you can add the following config to the  `package.json ` file.
 
-```sh
+```js
 "nodemonConfig": {
   "verbose": true,
   "ignore": ["public/*"]
 }
+```
+
+#### public\stylesheets\style.css
+> Update the `body` tag to see nodemon picup the changes
+```css
+background-color: #d9edf7;
 ```
 
 ### Difference between Morgan and Debug
@@ -99,22 +110,24 @@ $ npm run dev
 | It is for automated logging of requests, responses and related data. | works more like console.log but uses std error (stderr) to output messages. |
 
 ### Middleware
-```sh
-// set the app to auto log request and reponse values
+```js
+// set the app to auto log request and response values
 app.use(logger('dev'));
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // a middleware function with no mount path. This code is executed for every request to the router
 app.use(function (req, res, next) {
-  debug('Time:', Date.now())
-  next()
-})
+  debug('Time:', Date.now());
+  next();
+});
 ```
+
+> The idea of middleware in express is to update the request and responses as you see fit
  
 ### Working with route data
 | Request Method | Info |
@@ -127,7 +140,7 @@ app.use(function (req, res, next) {
  ### Add to the following file(s)
  
  #### views\form.pug
- ```sh
+ ```html
  extends layout
 
 block content
@@ -142,7 +155,7 @@ block content
         input(type="submit" value="Submit")
 ```
 #### views\results.pug
-```sh
+```html
 extends layout
 
 block content
@@ -156,7 +169,7 @@ block content
 
 #### routes\index.js
 > Add the following code
-```sh
+```js
 router.get('/form', function(req, res, next) {
     
     var msg = '';
@@ -185,8 +198,4 @@ router.get('/form', function(req, res, next) {
     }   
 });
 ```
-#### public\stylesheets\style.css
-> Update the body tag
-```sh
-background-color: #d9edf7;
-```
+

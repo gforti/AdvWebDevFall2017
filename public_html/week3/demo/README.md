@@ -9,14 +9,18 @@ $ npm install
 Now we can start the server with the following command to begin development
 
 ```sh
-$ npm run dev
+$ npm run dev:pc
+```
+or
+```sh
+$ npm run dev:mac
 ```
 
-> About `express-validator`
+## Express Validator
 
 https://www.npmjs.com/package/express-validator
 
-```sh
+```js
     req.checkBody('name', 'Invalid name').isAlpha();
     req.checkBody('age', 'Invalid age').notEmpty().isInt();
     req.checkBody('ate_of_birth', 'Invalid date').isDate();

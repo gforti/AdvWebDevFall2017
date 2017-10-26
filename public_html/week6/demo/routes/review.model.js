@@ -1,10 +1,7 @@
 var mongoose = require('mongoose');
 
 var reviewSchema = new mongoose.Schema({
-    author: {
-        type: String,
-        required: [true, 'Author is required']
-    },
+    author: String,
     rating: {
         type: Number,
         required: true,

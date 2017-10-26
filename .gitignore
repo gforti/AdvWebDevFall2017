@@ -1,3 +1,5 @@
 node_modules/
-lab/
 /nbproject/
+npm-debug.log
+.idea/
+.DS_Store

@@ -11,5 +11,31 @@ $ npm install
 Now we can start the server with the following command to begin development
 
 ```sh
-$ npm run dev
+$ npm run dev:pc
+```
+or
+```sh
+$ npm run dev:mac
+```
+
+## Install Express Debug
+
+https://www.npmjs.com/package/express-debug
+
+
+```sh
+$ npm install express-debug --save-dev
+```
+
+In the code `app.js` add this before `module.exports = app;`
+
+```js
+  ...
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+require('express-debug')(app);
+
+module.exports = app;
 ```

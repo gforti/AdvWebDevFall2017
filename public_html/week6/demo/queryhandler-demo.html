@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Proxy Demo</title>
+        <title>Query Demo</title>
         <style type="text/css">
             textarea {
                 width: 500px;
@@ -16,14 +16,11 @@
     </head>
     <body>        
         
-        <h1>Rest API Demo</h1>
+        <h1>Rest API Query Demo</h1>
 
         Verb/HTTP Method:<br />
         <select name="verb">
-            <option value="GET">GET</option>
-            <option value="POST">POST</option>
-            <option value="PUT">PUT</option>
-            <option value="DELETE">DELETE</option>
+            <option value="GET">GET</option>           
         </select>
         <br />
         <br />
@@ -32,13 +29,30 @@
         <br />
         <br />
         
-        Data(optional):<br />  
+        Data(optional):<br />  <br />
         
-        Author <input type="text" name="author" value="" />
+        Sort 
+        <select name="sort">
+            <option value="author">author</option>
+            <option value="rating">rating</option>
+            <option value="reviewText">reviewText</option>
+            <option value="createdOn">createdOn</option>
+        </select>    
+        
+        ASC <input type="radio" name="order" value="" />
+        DESC <input type="radio" name="order" value="-" />
+        
+        <br /><br />
+        
+        Search Text <input type="text" name="find" value="" />
         <br />
-        Rating <input type="text" name="rating" list="ratings" placeholder="5">        
-        <br />
-        Review Text <input type="text" name="reviewText" >
+        Column
+        <select name="column">
+             <option value="author">author</option>
+             <option value="rating">rating</option>
+             <option value="reviewText">reviewText</option>
+             <option value="createdOn">createdOn</option>
+         </select> 
                 
         <br />
         <br />
@@ -48,14 +62,7 @@
         <br />
         <textarea name="results" readonly></textarea>
 
-        <datalist id="ratings">
-            <option value="1">
-            <option value="2">
-            <option value="3">
-            <option value="4">
-            <option value="5">       
-        </datalist>
-        
+                
         <script type="text/javascript">
         
             var callBtn = document.querySelector('button');            
@@ -63,20 +70,28 @@
         
             function makeCall() {
                 
-                let data = {
-                    'author' : document.querySelector('input[name="author"]').value,
-                    'rating' : document.querySelector('input[name="rating"]').value,
-                    'reviewText' : document.querySelector('input[name="reviewText"]').value
-                };   
+                let params = {};   
                 
+                if (document.querySelector('input[name="order"]:checked')) {
+                    params['_sort'] = document.querySelector('input[name="order"]:checked').value + document.querySelector('select[name="sort"]').value
+                }
+                if (document.querySelector('input[name="find"]').value) {
+                    params[document.querySelector('select[name="column"]').value] = document.querySelector('input[name="find"]').value
+                }
                 
+                 
+                let esc = encodeURIComponent;
+                let query = Object.keys(params)
+                    .map(k => esc(k) + '=' + esc(params[k]))
+                    .join('&');
+                                 
                 let verbfield = document.querySelector('select[name="verb"]');
                 let verb = verbfield.options[verbfield.selectedIndex].value;
                 let resource = document.querySelector('input[name="resource"]').value;                         
                 let results = document.querySelector('textarea[name="results"]');
-                let url = `http://localhost:3001/api/v1/${resource}`;
-                   
-                document.querySelector('input[name="query"]').value = url;
+                let url = `http://localhost:3001/api/v1/${resource}?${query}`;
+               
+                document.querySelector('input[name="query"]').value = url
                 
                 let myHeaders = new Headers();
                 myHeaders.set('Content-Type', 'application/json');
@@ -85,11 +100,7 @@
                                mode: 'cors',
                                cache: 'default' 
                              };
-                             
-                if ( ['POST', 'PUT'].indexOf(verb) > -1 ) {
-                    myInit.body = JSON.stringify(data)
-                }
-                    
+                                     
                 let myRequest = new Request(url, myInit);
                 
                 fetch( myRequest ).then(function(response) { 

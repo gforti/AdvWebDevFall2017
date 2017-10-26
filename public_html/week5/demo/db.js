@@ -6,7 +6,12 @@ if (process.env.NODE_ENV === 'production') {
     dbURI = process.env.MONGOLAB_URI;
 }
 
-mongoose.connect(dbURI);
+mongoose.connect(dbURI, {
+  useMongoClient: true,
+  /* other options */
+});
+
+mongoose.Promise = Promise;
 
 // CONNECTION EVENTS
 mongoose.connection.on('connected', function() {
@@ -14,7 +19,7 @@ mongoose.connection.on('connected', function() {
 });
 mongoose.connection.on('error', function(err) {
     debug('Mongoose connection error: ' + err);
-     process.exit(0);
+    process.exit(0);
 });
 mongoose.connection.on('disconnected', function() {
     debug('Mongoose disconnected');

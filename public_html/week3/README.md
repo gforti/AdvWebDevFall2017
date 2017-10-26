@@ -41,7 +41,7 @@ $ npm install nodemon --save-dev
 
 in the `package.json` lets add this to the scripts json
 
-```sh
+```js
 "dev": "SET DEBUG=folder-name:* & nodemon ./bin/www"
 ```
 Now we can start the server with the following command to begin development

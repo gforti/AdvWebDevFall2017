@@ -18,4 +18,4 @@ or
 $ npm run dev:mac
 ```
 
-> Run `proxyDemo.html` as it's own page, it is not part of the express project
+> Run `queryhandler-demo.html` as it's own page, it is not part of the express project

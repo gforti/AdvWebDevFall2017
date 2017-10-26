@@ -9,8 +9,40 @@ function sendJSONresponse(res, status, content) {
 module.exports.reviewsReadAll = function(req, res) {
         
     debug('Getting all reviews');
+    
+    var where = {};
+    var options = {};
+    options.sort = null;
+       
+    if (req.query) {
+        debug(req.query);
+          
+        var key;
+        for (key in req.query) {
+          if (key.indexOf('_') === -1) {
+              // (test1|test3) = .replace(/[\W_]+/g,'')
+              where[key] =  { $regex: new RegExp('.*?'+req.query[key]+'.*') };
+          }
+        }
+        /* Prevent Parameter Pollution
+         * https://www.npmjs.com/package/hpp         
+         * ?_sort=author&_sort=author = && typeof(req.query._sort) === 'string' 
+         */
+        if (req.query._sort) {
+            var prefix = 1;
+            if (req.query._sort.match(/-/)) prefix = -1;
+            var field = req.query._sort.replace(/-|\s/g, '');
+            options.sort = {};
+            options.sort[field] = prefix;
+        }
+        
+    }
+    
+    debug('where', where);
+    debug('options', options);
+    
     Review
-     .find()
+     .find(where, null, options)
      .exec()
      .then(function(results){
         sendJSONresponse(res, 200, results);
@@ -18,7 +50,7 @@ module.exports.reviewsReadAll = function(req, res) {
      .catch(function(err){
         sendJSONresponse(res, 404, err);         
      });
-    
+         
 };
 
 module.exports.reviewsReadOne = function(req, res) {
