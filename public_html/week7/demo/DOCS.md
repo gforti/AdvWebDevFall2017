@@ -1,4 +1,4 @@
-#SSPAF Simple Single Page Application Framework
+# SSPAF Simple Single Page Application Framework
 
 The idea here is to create a single page app with modern JavaScript.  This is not a full featured framework.  There is no security and is intended for school, sample projects or quick prototypes.
 
