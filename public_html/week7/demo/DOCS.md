@@ -26,4 +26,16 @@ Inside of `spa.model.js`
 this.bindData.reviews = `<strong>Hello World</strong>`
 ```
 
+Events can also be binded to html tags with the custom attribute `data-event` like so
 
+```html
+<input type="text" name="author" data-event="keyup:updateAuthor" />
+```
+or 
+```html
+<input type="button" value="submit" data-event="click:saveReviews" />
+```
+
+The first value is the event followed by the function to be called from the `model class`
+
+> `event`:`function`
