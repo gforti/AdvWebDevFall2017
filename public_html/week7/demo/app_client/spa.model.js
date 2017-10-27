@@ -38,7 +38,7 @@ class Model {
                })                            
    }
    
-   getURLParams(){
+   urlParams(){
        return new URLSearchParams(window.location.search);
    }
 
@@ -89,7 +89,7 @@ class Model {
    }
    
    updatePageLoad(){
-       const url = `${this.APIS.Reviews}${this.getURLParams().get('id')}`
+       const url = `${this.APIS.Reviews}${this.urlParams().get('id')}`
        return this.http.get(url).then( data => {           
            this.dataBind.author = data.author
            this.dataBind.rating = data.rating
