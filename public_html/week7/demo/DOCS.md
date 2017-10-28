@@ -2,11 +2,11 @@
 
 The idea here is to create a single page app with modern JavaScript.  This is not a full featured framework.  There is no security and is intended for school, sample projects or quick prototypes.
 
-### spa.js
+## spa.js
 
 This file is the core of the SPA.  It's the director and manages the page.  Nothing needs to be updated or added unless you would like to add or fix the functionality.
 
-SSPAF supports
+`SSPAF` supports
 
 - Simple hash navigation
 - Query Param handling
@@ -19,13 +19,13 @@ SSPAF supports
 - Modern use of JavaScript (es6+)
 
 
-### spa.views.js
+## spa.views.js
 
 The views are your page templates.  When a hash triggers a page the view will be loaded.
 
 The hash name must match the view name.
 
-> #test must have test() { return html }
+> location `#test` must have `test() { return html }`
 
 You can add the `data-bindText` attribute to an tag to inject html from the model.
 
@@ -71,7 +71,7 @@ updatePage(evt){
 ```
 
 
-### spa.components.js
+## spa.components.js
 
 This file is to place component views that are injected after the page is loaded.
 > All functions should be `static`
@@ -111,7 +111,7 @@ getReviews() {
 ```
 
 
-### spa.model.js
+## spa.model.js
 
 The Model is where all your business logic should be. Functions that will be executed from `data-event`s or values that will be binded 
 with this.bindData are to be handled within the `Model class`.
@@ -195,3 +195,25 @@ Here are some samples on how to create functions.
                })  
    }
 ```
+
+## spa.controller.js
+
+Like the view, each controller function must match the hash name used to generate the page.
+
+> location `#test` must have `test() { return Promise }`
+
+```js
+home() {
+    return this.model.getReviews()
+}
+```
+
+If the page does not need to process any data from the model before the view is rendered you can simply just do
+
+```js
+add() {                   
+    return Promise.resolve()
+}
+``` 
+
+> A `promise` must be returned
