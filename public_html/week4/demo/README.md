@@ -42,8 +42,8 @@ module.exports = app;
 
 ## Note about dates with `MongoDB`
 
-if you store a string such as `2018-10-01`  it will store `2018-09-30` due to not adding the time.  
-Since the time it will default is midnight we need to add the time zone to the date. 
+If you store a string such as `2018-10-01` it will instead store `2018-09-30` due to not adding the time.  
+Since the time value will default to midnight we need to add the time zone to the date to correct this issue. 
 
 ```js
 new Date('2018-10-01 EST');
