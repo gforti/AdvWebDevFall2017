@@ -17,6 +17,7 @@ class SPA {
                     this.renderContent(this.view[page]).bindModelText().parseEvents().twoWayFormBind()
                     this.loadingEnd()
                 })
+                .catch(err => this.renderContent('<p>There was an error with the request</p>').loadingEnd())
         })
 
         if (typeof route === 'string') {
