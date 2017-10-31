@@ -1,23 +1,19 @@
 class Controller {
-                
+
     constructor(model) {
-        this.model = model                   
+        this.Model = model
     }
 
     home() {
-        return this.model.getReviews()
+        return this.Model.getReviews()
     }
 
     add() {                   
         return Promise.resolve()
     }
-
-    test() {
-        return Promise.resolve()
-    }
     
     update() {        
-        return this.model.updatePageLoad()
+        return this.Model.updatePageLoad()
     }
 
 }

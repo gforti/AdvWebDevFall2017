@@ -1,13 +1,48 @@
-class Model extends BaseModel {
-
+class Model {
+                
     constructor() {
-        super()
-        this.APIS = {
-            Reviews : 'http://localhost:3001/api/v1/reviews/'
-        }
-    }
+       this.APIS = {
+           Reviews : 'http://localhost:3001/api/v1/reviews/'
+       }
+       this.dataBind = {}
 
-    getReviews() {
+       this.http = {
+           get: (url) => {
+               return this.httpFetch(url, null, 'GET').then( response => response.json())
+           },
+           post: (url, data) => {
+               return this.httpFetch(url, data, 'POST').then( response => response.json())
+           },
+           put: (url, data) => {
+               return this.httpFetch(url, data, 'PUT').then( response => response.json())
+           },
+           delete: (url) => {
+               return this.httpFetch(url, null, 'DELETE')
+           }
+       }
+   }
+
+
+   httpFetch(url, data, verb){                    
+       let myHeaders = new Headers()
+       myHeaders.set('Content-Type', 'application/json')
+       let myInit = { method: verb, headers: myHeaders, mode: 'cors', cache: 'default'}                    
+       if ( data ) {
+           myInit.body = JSON.stringify(data)
+       }
+       const myRequest = new Request(url, myInit);                
+       return fetch(myRequest)
+               .then(response => {
+                   if (!response.ok) throw Error(response.statusText)
+                   return response;
+               })                            
+   }
+   
+   urlParams(){
+       return new URLSearchParams(window.location.search);
+   }
+
+   getReviews() {
        return this.http.get(this.APIS.Reviews)
               .then( data => {
                    return this.dataBind.reviewTable = Components.resultsData(data) 
@@ -80,5 +115,4 @@ class Model extends BaseModel {
                    return err
                })  
    }
-
 }

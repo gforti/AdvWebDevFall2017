@@ -4,7 +4,7 @@
   z-index: 999;
   height: 2em;
   width: 2em;
-  overflow: show;
+  overflow: hidden;
   margin: auto;
   top: 0;
   left: 0;
@@ -25,7 +25,31 @@
   background-color: rgba(0,0,0,0.3);
 }
 
-
-.visable {
+.visible {
     visibility: visible;
+}
+
+body#home {
+    background-color: coral;
+}
+
+body#test {
+    background-color: skyblue;
+}
+
+body#todo{
+    background-image: linear-gradient(white 0%, aliceblue 100%);
+}
+
+.list li {
+    padding: 0.8rem;
+}
+
+.list li:nth-child(odd){
+    background: rgba(0,0,50,.1);
+}
+
+input[type="checkbox"]:checked + label{
+    text-decoration: line-through;
+    color: rgba(0,0,0,.3);
 }

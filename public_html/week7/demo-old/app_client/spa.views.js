@@ -1,5 +1,5 @@
 class View {
-
+                       
     get home() {                    
         const html = `<p data-bindtext="deleteResultMsg"></p>
                       <table>
@@ -40,6 +40,10 @@ class View {
                         <p> <input type="button" value="submit" data-event="click:saveReviews" /> </p>
                     </form>`
     }
+
+    get test() { 
+        return 'test'
+    }
     
     get update() { 
         return `<form data-bindall>
@@ -66,5 +70,5 @@ class View {
                     <p> <input type="button" value="submit" data-event="click:updateReviews" /> </p>
                 </form>`
     }
-
+    
 }
