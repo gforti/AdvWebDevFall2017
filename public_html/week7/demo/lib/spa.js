@@ -1,5 +1,5 @@
 class SPA {
-
+                
     constructor(route) {
         this.content = document.querySelector('div.content')
         this.loading = document.querySelector('div.loading').classList
@@ -7,26 +7,24 @@ class SPA {
         this.view = new View()
         this.controller = new Controller(this.model)
 
-        window.addEventListener('hashchange', () => {
+        window.addEventListener('hashchange', ()=>{
             this.loadingStart()
             this.model.dataBind = {}
             let page = `${window.location.hash.slice(1).split('?')[0]}`
-            document.body.id = page
+            document.body.id = page            
             this.controller[page]()
-                .then(() => {
-                    this.renderContent(this.view[page]).bindModelText().parseEvents().twoWayFormBind().loadingEnd()
-                })
-                .catch(err => {
+                .then( ()=> { this.renderContent(this.view[page]).bindModelText().parseEvents().twoWayFormBind().loadingEnd() })
+                .catch( err => {
                     this.renderContent('<p>There was an error with the request</p>').loadingEnd()
                     console.error(err)
                 })
         })
 
-        if (!window.location.hash && typeof route === 'string') {
-            window.location.hash = route
+        if ( !window.location.hash && typeof route === 'string') {
+            window.location.hash = route            
         }
         window.dispatchEvent(new HashChangeEvent('hashchange'))
-
+       
     }
 
     loadingStart() {
@@ -39,26 +37,26 @@ class SPA {
         return this
     }
 
-    renderContent(html) {
+    renderContent(html) {       
         this.content.innerHTML = html
         return this
     }
 
-    update(evt, funcName) {
-        this.model[funcName](evt).then(() => {
+    update(evt, funcName){
+        this.model[funcName](evt).then(()=>{
             this.bindModelText().parseEvents().twoWayFormBind()
-        })
+        }) 
     }
 
     parseEvents() {
-        let contents = this.content.querySelectorAll('*[data-event]')
-        contents.forEach(domElem => {
+        let contents = this.content.querySelectorAll('*[data-event]')                    
+        contents.forEach( domElem => {
             const [evtName, funcName] = domElem.dataset.event.split(':')
             domElem.addEventListener(evtName, evt => {
                 return this.update(evt, funcName)
             })
             delete domElem.dataset.event
-        })
+        })                                          
         return this
     }
 
@@ -69,11 +67,11 @@ class SPA {
                 const target = event.target
                 const property = target.name
                 if (property && target.matches('input') || target.matches('select')) {
-                    this.model.dataBind[property] = target.value
+                  this.model.dataBind[property] = target.value                              
                 }
             })
             delete form.dataset.bindall
-        }
+        } 
 
         return this
     }
@@ -82,20 +80,18 @@ class SPA {
         let contents = this.content.querySelectorAll('*[data-bindtext],input[name], select[name]')
         const obj = this.model.dataBind
         if (contents) {
-            contents.forEach(domElem => {
+            contents.forEach( domElem => {
                 const property = domElem.name || domElem.dataset.bindtext
-                const selector = `*[data-bindText="$"],input[name="$"], select[name="$"]`
-                let val
-                if (obj[property]) {
+                const selector = `*[data-bindText="${property}"],input[name="${property}"], select[name="${property}"]`
+                let val       
+                if ( obj[property] ) {
                     val = obj[property]
                     if ('value' in domElem) domElem.value = val
                     else if ('innerHTML' in domElem) domElem.innerHTML = val
-                }
+                } 
                 Object.defineProperty(obj, property, {
-                    get: function() {
-                        return val
-                    },
-                    set: function(newValue) {
+                    get: () => { return val }, 
+                    set: (newValue) => { 
                         let elems = document.querySelectorAll(selector)
                         val = newValue
                         if (elems) {
@@ -113,7 +109,7 @@ class SPA {
 
 
         return this
-    }
-
+      }
+  
 
 }
