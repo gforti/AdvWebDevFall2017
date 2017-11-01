@@ -48,8 +48,8 @@ class Model extends BaseModel {
    }
    
    updatePage(evt){       
-       const params = `?id=${evt.target.dataset.id}`       
-       window.location.href =  `${params}#update` 
+       const params = this.generateUrlParams({id: evt.target.dataset.id})
+       window.location.href = `${params}#update` 
        return Promise.resolve()
    }
    

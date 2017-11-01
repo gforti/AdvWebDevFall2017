@@ -13,11 +13,13 @@ class SPA {
             let page = `${window.location.hash.slice(1).split('?')[0]}`
             document.body.id = page            
             this.controller[page]()
-                .then( ()=> { this.renderContent(this.view[page]).bindModelText().parseEvents().twoWayFormBind().loadingEnd() })
+                .then( ()=> { this.renderContent(this.view[page]).bindModelText().parseEvents().twoWayFormBind().loadingEnd().cleanNavLinks() })
                 .catch( err => {
                     this.renderContent('<p>There was an error with the request</p>').loadingEnd()
                     console.error(err)
                 })
+                
+            window.location.href.replace(window.location.search, '');
         })
 
         if ( !window.location.hash && typeof route === 'string') {
@@ -47,6 +49,13 @@ class SPA {
             this.bindModelText().parseEvents().twoWayFormBind()
         }) 
     }
+    
+    cleanNavLinks(){
+      let links = document.querySelector('nav').querySelectorAll('a')
+      links.forEach( link => { link.setAttribute('href', `${link.origin}${link.hash}`) })
+      return this
+    }
+
 
     parseEvents() {
         let contents = this.content.querySelectorAll('*[data-event]')                    
