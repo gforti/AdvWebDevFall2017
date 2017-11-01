@@ -38,5 +38,5 @@ function pack(evt, name) {
 
 connect().use(serveStatic(__dirname)).listen(3000, () => {
     console.log('Server running on http://localhost:3000/')
-    open('http://localhost:3000/', 'chrome')
+    open('http://localhost:3000/')
 })
