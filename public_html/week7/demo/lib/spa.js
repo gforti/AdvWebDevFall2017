@@ -15,7 +15,7 @@ class SPA {
             this.controller[page]()
                 .then( ()=> { this.renderContent(this.view[page]).bindModelText().parseEvents().twoWayFormBind().loadingEnd().cleanNavLinks() })
                 .catch( err => {
-                    this.renderContent('<p>There was an error with the request</p>').loadingEnd()
+                    this.renderContent('<p>There was an error with the request</p>').loadingEnd().cleanNavLinks()
                     console.error(err)
                 })
                 
@@ -75,7 +75,7 @@ class SPA {
             form.addEventListener('change', (event) => {
                 const target = event.target
                 const property = target.name
-                if (property && target.matches('input') || target.matches('select')) {
+                if (property && target.matches('input, select, textarea')) {
                   this.model.dataBind[property] = target.value                              
                 }
             })
@@ -86,12 +86,12 @@ class SPA {
     }
 
     bindModelText() {
-        let contents = this.content.querySelectorAll('*[data-bindtext],input[name], select[name]')
+        let contents = this.content.querySelectorAll('*[data-bindtext], input[name], select[name], textarea[name]')
         const obj = this.model.dataBind
         if (contents) {
             contents.forEach( domElem => {
                 const property = domElem.name || domElem.dataset.bindtext
-                const selector = `*[data-bindText="${property}"],input[name="${property}"], select[name="${property}"]`
+                const selector = `*[data-bindText="${property}"], input[name="${property}"], select[name="${property}"], textarea[name="${property}"]`
                 let val       
                 if ( obj[property] ) {
                     val = obj[property]
@@ -100,7 +100,7 @@ class SPA {
                 } 
                 Object.defineProperty(obj, property, {
                     get: () => { return val }, 
-                    set: (newValue) => { 
+                    set: (newValue) => {
                         let elems = document.querySelectorAll(selector)
                         val = newValue
                         if (elems) {
