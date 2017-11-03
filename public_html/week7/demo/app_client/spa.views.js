@@ -60,7 +60,7 @@ class View {
                     </p>
                     <p>
                         <label>Review</label>
-                        <input type="text" name="reviewText" />
+                        <textarea type="text" name="reviewText"></textarea>
                     </p>
                     <p data-bindtext="updateResultMsg"></p>
                     <p> <input type="button" value="submit" data-event="click:updateReviews" /> </p>
