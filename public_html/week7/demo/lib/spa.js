@@ -1,32 +1,32 @@
 class SPA {
-                
+
     constructor(route) {
         this.content = document.querySelector('div.content')
         this.loading = document.querySelector('div.loading').classList
-        this.model = new Model()
+        this.Model = new Model()
         this.view = new View()
-        this.controller = new Controller(this.model)
+        this.controller = new Controller(this.Model)
 
-        window.addEventListener('hashchange', ()=>{
+        window.addEventListener('hashchange', () => {
             this.loadingStart()
-            this.model.dataBind = {}
+            this.Model.dataBind = {}
             let page = `${window.location.hash.slice(1).split('?')[0]}`
-            document.body.id = page            
+            document.body.id = page
             this.controller[page]()
-                .then( ()=> { this.renderContent(this.view[page]).bindModelText().parseEvents().twoWayFormBind().loadingEnd().cleanNavLinks() })
-                .catch( err => {
-                    this.renderContent('<p>There was an error with the request</p>').loadingEnd().cleanNavLinks()
-                    console.error(err)
-                })
-                
+                    .then(() => {
+                        this.renderContent(this.view[page]).bindModelText().parseEvents().twoWayFormBind().loadingEnd().cleanNavLinks()
+                    })
+                    .catch(err => {
+                        console.error(err)
+                        this.renderContent(this.Model.escapeHTML(err)).loadingEnd().cleanNavLinks()
+                    })
             window.location.href.replace(window.location.search, '');
         })
 
-        if ( !window.location.hash && typeof route === 'string') {
-            window.location.hash = route            
+        if (!window.location.hash && typeof route === 'string') {
+            window.location.hash = route
         }
         window.dispatchEvent(new HashChangeEvent('hashchange'))
-       
     }
 
     loadingStart() {
@@ -39,33 +39,34 @@ class SPA {
         return this
     }
 
-    renderContent(html) {       
+    renderContent(html) {
         this.content.innerHTML = html
         return this
     }
 
-    update(evt, funcName){
-        this.model[funcName](evt).then(()=>{
+    update(evt, funcName) {
+        this.Model[funcName](evt).then(() => {
             this.bindModelText().parseEvents().twoWayFormBind()
-        }) 
-    }
-    
-    cleanNavLinks(){
-      let links = document.querySelector('nav').querySelectorAll('a')
-      links.forEach( link => { link.setAttribute('href', `${link.origin}${link.hash}`) })
-      return this
+        })
     }
 
+    cleanNavLinks() {
+        let links = document.querySelector('nav').querySelectorAll('a')
+        links.forEach(link => {
+            link.setAttribute('href', `${link.origin}${link.hash}`)
+        })
+        return this
+    }
 
     parseEvents() {
-        let contents = this.content.querySelectorAll('*[data-event]')                    
-        contents.forEach( domElem => {
+        let contents = this.content.querySelectorAll('*[data-event]')
+        contents.forEach(domElem => {
             const [evtName, funcName] = domElem.dataset.event.split(':')
             domElem.addEventListener(evtName, evt => {
                 return this.update(evt, funcName)
             })
             delete domElem.dataset.event
-        })                                          
+        })
         return this
     }
 
@@ -76,49 +77,49 @@ class SPA {
                 const target = event.target
                 const property = target.name
                 if (property && target.matches('input, select, textarea')) {
-                  this.model.dataBind[property] = target.value                              
+                    this.Model.dataBind[property] = target.value
                 }
             })
             delete form.dataset.bindall
-        } 
-
+        }
         return this
     }
 
     bindModelText() {
         let contents = this.content.querySelectorAll('*[data-bindtext], input[name], select[name], textarea[name]')
-        const obj = this.model.dataBind
+        const obj = this.Model.dataBind
         if (contents) {
-            contents.forEach( domElem => {
+            contents.forEach(domElem => {
                 const property = domElem.name || domElem.dataset.bindtext
                 const selector = `*[data-bindText="${property}"], input[name="${property}"], select[name="${property}"], textarea[name="${property}"]`
-                let val       
-                if ( obj[property] ) {
+                let val, safeVal
+                const useSafeHTML = domElem.hasAttribute('data-safe')
+                if (obj[property]) {
                     val = obj[property]
-                    if ('value' in domElem) domElem.value = val
-                    else if ('innerHTML' in domElem) domElem.innerHTML = val
-                } 
+                    safeVal = this.Model.escapeHTML(val)
+                    if ('value' in domElem) domElem.value = useSafeHTML ? safeVal : val
+                    else if ('innerHTML' in domElem) domElem.innerHTML = useSafeHTML ? safeVal : val
+                }
                 Object.defineProperty(obj, property, {
-                    get: () => { return val }, 
+                    get: () => {
+                        return val
+                    },
                     set: (newValue) => {
                         let elems = document.querySelectorAll(selector)
                         val = newValue
+                        safeVal = this.Model.escapeHTML(val)
                         if (elems) {
                             elems.forEach(elem => {
-                                if ('value' in elem) elem.value = val
-                                else if ('innerHTML' in elem) elem.innerHTML = val
+                                if ('value' in elem) elem.value = useSafeHTML ? safeVal : val
+                                else if ('innerHTML' in elem) elem.innerHTML = useSafeHTML ? safeVal : val
                             })
                         }
                     },
                     configurable: true
                 })
-
             })
         }
-
-
         return this
-      }
-  
+    }
 
 }

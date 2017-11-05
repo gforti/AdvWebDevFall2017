@@ -22,7 +22,7 @@ function pack(evt, name) {
       'spa.views.js' : fs.readFileSync("app_client/spa.views.js", "utf8")
       }
     var uglified = uglifyJs.minify(appClientFiles, { compress : false, keep_fnames: true, mangle: false })
-    
+
     if (uglified.error) console.log(uglified.error)
     if (uglified.warnings) console.log(uglified.warnings)
 
@@ -36,7 +36,7 @@ function pack(evt, name) {
     })
 }
 
-connect().use(serveStatic(__dirname)).listen(3000, () => {
+connect().use(serveStatic(__dirname)).listen(3000, '0.0.0.0', () => {
     console.log('Server running on http://localhost:3000/')
     open('http://localhost:3000/')
 })
