@@ -5,12 +5,11 @@ class Controller {
     }
 
     home() {
-        return this.Model.getReviewList()
+        return this.Model.getReviews()
     }
-    
-    add() { 
-        this.Model.clearDataBindModel()
-        return window.Promise.resolve()
+
+    add() {                   
+        return Promise.resolve()
     }
     
     update() {        

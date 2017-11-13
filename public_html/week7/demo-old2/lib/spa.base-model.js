@@ -2,13 +2,7 @@ class BaseModel {
 
     constructor() {
         this.APIS = {}
-        this._Model = {}
-        
-        Object.getOwnPropertyNames(Object.getPrototypeOf(new Controller))
-                .filter(page => page !== 'constructor')
-                .forEach(page => {
-                    this._Model[page] = {}
-                })
+        this.dataBind = {}
 
         this.http = {
             get: (url) => {
@@ -24,24 +18,6 @@ class BaseModel {
                 return this.httpFetch(url, null, 'DELETE')
             }
         }
-    }
-    
-    get dataBindModel() {
-        return this._Model[this.page]
-    }
-    
-    set dataBindModel(model) {
-        Object.assign(this._Model[this.page], model)
-        return this
-    }
-    
-    clearDataBindModel() {
-        this._Model[this.page] = {}
-        return this
-    }
-    
-    get page() {
-        return window.location.hash.slice(1).split('?')[0]
     }
 
     escapeHTML(html) {
@@ -67,7 +43,8 @@ class BaseModel {
     }
 
     generateUrlParams(params = {}) {
-        return `?${Object.keys(params).map(k => [k, params[k]].map(window.encodeURIComponent).join('=')).join('&')}`
+        const esc = encodeURIComponent
+        return `?${Object.keys(params).map(k => `${esc(k)}=${esc(params[k])}`).join('&')}`
     }
 
     urlParams() {

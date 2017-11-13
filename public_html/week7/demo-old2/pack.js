@@ -20,32 +20,19 @@ function pack(evt, name) {
       'spa.controller.js': fs.readFileSync("app_client/spa.controller.js", "utf8"),
       'spa.model.js': fs.readFileSync("app_client/spa.model.js", "utf8"),
       'spa.views.js' : fs.readFileSync("app_client/spa.views.js", "utf8")
-    }
+      }
+    var uglified = uglifyJs.minify(appClientFiles, { compress : false, keep_fnames: true, mangle: false })
 
-    fs.readdir('mixins', (err, filenames) => {
-        if (err) {
+    if (uglified.error) console.log(uglified.error)
+    if (uglified.warnings) console.log(uglified.warnings)
+
+    fs.writeFile('public/spa.min.js', uglified.code, (err) => {
+        if(err) {
             console.log(err)
-            return
+        } else {
+            console.log("Script generated and saved:", 'spa.min.js')
+            console.log("Refresh the page")
         }
-
-        filenames.forEach((filename) => {
-            appClientFiles[filename] = fs.readFileSync("mixins/"+ filename, "utf8")
-        })
-
-        var uglified = uglifyJs.minify(appClientFiles, { compress : false, keep_fnames: true, mangle: false })
-
-        if (uglified.error) console.log(uglified.error)
-        if (uglified.warnings) console.log(uglified.warnings)
-
-        fs.writeFile('public/spa.min.js', uglified.code, (err) => {
-            if(err) {
-                console.log(err)
-            } else {
-                console.log("Script generated and saved:", 'spa.min.js')
-                console.log("Refresh the page")
-            }
-        })
-
     })
 }
 

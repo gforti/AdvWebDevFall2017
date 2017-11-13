@@ -1,55 +1,85 @@
  /* Absolute Center Spinner */
-.loading {
-  position: fixed;
-  z-index: 999;
-  height: 2em;
-  width: 2em;
-  overflow: hidden;
-  margin: auto;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  visibility: hidden;
+.spa-loading {
+    bottom: 0;
+    height: 2em;
+    left: 0;
+    margin: auto;
+    overflow: hidden;
+    position: fixed;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+    width: 2em;
+    z-index: 999;
 }
 
 /* Transparent Overlay */
-.loading:before {
-  content: '';
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.3);
+.spa-loading:before {
+    background-color: rgba(0,0,0,0.3);
+    content: '';
+    display: block;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;  
+    width: 100%;
 }
 
 .visible {
     visibility: visible;
 }
 
-body#home {
-    background-color: coral;
+
+*[data-bind-display=hidden]:not(input):not(select):not(textarea) {    
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+    visibility: hidden;
+}
+*[data-bind-display=visible]:not(input):not(select):not(textarea) {    
+    opacity: 1;
+    transition: opacity 0.3s, visibility 0.3s;
+    visibility: visible;
 }
 
-body#test {
-    background-color: skyblue;
+
+.table td, .table th {
+    vertical-align: middle;
+    text-align: center;
 }
 
-body#todo{
-    background-image: linear-gradient(white 0%, aliceblue 100%);
+.spacer {
+    margin-bottom: 1rem;
 }
 
-.list li {
-    padding: 0.8rem;
+input:required:invalid, 
+select:required:invalid,
+textarea:required:invalid
+{
+  border: 1px solid red;
 }
 
-.list li:nth-child(odd){
-    background: rgba(0,0,50,.1);
+input:required:valid, 
+select:required:valid,
+textarea:required:valid
+{
+  border: 1px solid green;
 }
 
-input[type="checkbox"]:checked + label{
-    text-decoration: line-through;
-    color: rgba(0,0,0,.3);
+
+input[type="checkbox"]:required {
+    display: none;
+}
+
+input[type="checkbox"]:required:invalid + label::before {
+  content: "\2610";
+  padding-right: 0.2em;
+  font-size: 1.6em;
+  color: red;
+}
+
+input[type="checkbox"]:required:valid + label::before {
+  content: "\2611";
+  padding-right: 0.2em;
+  font-size: 1.6em;
+  color: green;
 }
