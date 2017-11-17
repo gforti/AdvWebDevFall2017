@@ -1,0 +1,104 @@
+ /* Absolute Center Spinner */
+.spa-loading {
+    bottom: 0;
+    height: 2em;
+    left: 0;
+    margin: auto;
+    overflow: hidden;
+    position: fixed;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+    width: 2em;
+    z-index: 999;
+}
+
+/* Transparent Overlay */
+.spa-loading:before {
+    background-color: rgba(0,0,0,0.3);
+    content: '';
+    display: block;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;  
+    width: 100%;
+}
+
+.visible {
+    visibility: visible;
+}
+
+*[data-bind-display=hidden]:not(input):not(select):not(textarea) {    
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+    visibility: hidden;
+}
+*[data-bind-display=visible]:not(input):not(select):not(textarea) {    
+    opacity: 1;
+    transition: opacity 0.3s, visibility 0.3s;
+    visibility: visible;
+}
+
+body#home {
+    background-color: coral;
+}
+
+body#home > nav > a[href$="home"]
+{
+    background-color: #292929;
+    border-color: transparent;
+    color: whitesmoke;
+    padding: 0.2em 0.5em;
+    text-align: center;
+    text-decoration: none;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.spacer {
+    margin-bottom: 1rem;
+}
+
+input:required:invalid, 
+select:required:invalid,
+textarea:required:invalid
+{
+  border: 1px solid red;
+}
+
+input:required:valid, 
+select:required:valid,
+textarea:required:valid
+{
+  border: 1px solid green;
+}
+
+
+input[type="checkbox"]:required {
+    display: none;
+}
+
+input[type="checkbox"]:required:invalid + label::before {
+  content: "\2610";
+  padding-right: 0.2em;
+  font-size: 1.6em;
+  color: red;
+}
+
+input[type="checkbox"]:required:valid + label::before {
+  content: "\2611";
+  padding-right: 0.2em;
+  font-size: 1.6em;
+  color: green;
+}
+
+.good {
+    background-color: greenyellow;
+}
+
+.bad {
+    background-color: orangered;
+}
