@@ -1,14 +1,17 @@
 class Components {
-    static resultsData(data){
-        if ( ! Array.isArray(data) ) return ''
-        return `${data.map(row=>                                         
+    
+   static todoTable(data){
+        if ( !Array.isArray(data) ) return Promise.resolve('')
+        return Promise.resolve(`${data.map(row=>                                         
                     `<tr>
                         <td>${row.author}</td>
                         <td>${row.rating}</td>
                         <td>${row.reviewText}</td>
-                        <td><button data-id="${row._id}" data-event="click:deleteReview">Delete</button></td>
-                        <td><button data-id="${row._id}" data-event="click:updatePage">Update</button></td>
+                        <td>${row.createdOnFormated}</td>
+                        <td><button data-id="${row._id}" data-bind-event="click:deleteTodo" class="button is-danger is-outlined">Delete</button></td>
+                        <td><button data-id="${row._id}" data-bind-event="click:goToUpdatePage" class="button is-link is-outlined">Update</button></td>
                     </tr>`
-                ).join('')}`
+                ).join('')}`)
     }
+    
 }

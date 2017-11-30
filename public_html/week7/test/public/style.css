@@ -29,7 +29,6 @@
     visibility: visible;
 }
 
-
 *[data-bind-display=hidden]:not(input):not(select):not(textarea) {    
     opacity: 0;
     transition: opacity 0.3s, visibility 0.3s;
@@ -41,10 +40,22 @@
     visibility: visible;
 }
 
+body#home {
+    background-color: coral;
+}
 
-.table td, .table th {
-    vertical-align: middle;
+body#home > nav > a[href$="home"]
+{
+    background-color: #292929;
+    border-color: transparent;
+    color: whitesmoke;
+    padding: 0.2em 0.5em;
     text-align: center;
+    text-decoration: none;
+}
+
+.table td {
+    vertical-align: middle;
 }
 
 .spacer {
@@ -84,20 +95,10 @@ input[type="checkbox"]:required:valid + label::before {
   color: green;
 }
 
-
-.sort {
-    
-    cursor: pointer;
-    white-space: nowrap;
+.good {
+    background-color: greenyellow;
 }
 
-.sort:after {
-    content: " \25bc";
-    color: transparent;
-    vertical-align: super;
-    font-size: xx-small;
-}
-
-.sort.active:after {
-    color: red;
+.bad {
+    background-color: orangered;
 }

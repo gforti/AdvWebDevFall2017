@@ -13,8 +13,8 @@ class SPA {
             let page = this.Model.page
             document.body.id = page
             this.controller[page]()
-                    .then((site) => {
-                        return this.renderContent(this.View[site])
+                    .then(() => {
+                        return this.renderContent(this.View[page])
                     })
                     .then(() => {
                       this.bindModelText().parseEvents().twoWayInputBind().parseClassState().cleanNavLinks().loadingEnd()

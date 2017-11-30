@@ -4,18 +4,25 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel='stylesheet' href='node_modules/bulma/css/bulma.css' />
         <link rel='stylesheet' href='public/style.css' />
     </head>
-    <body>
-        
-        <div class="loading">Loading&#8230;</div>
-        
-         <nav>            
-            <a href="#home">home</a> |
-            <a href="#add">Add Review</a>
-        </nav>
-        <div class="content">TODO write content</div>
-                       
+    <body>        
+        <div class="spa-loading">Loading&#8230;</div>
+              
+        <div class="container">
+            <nav class="navbar is-danger"> 
+                <div class="navbar-item">
+                    <strong class="is-size-5 has-text-light">SSPAF Todo</strong>
+                </div>
+                <div class="navbar-start">
+                    <a href="#home" class="navbar-item">Home</a>
+                    <a href="#add" class="navbar-item">Add New</a>
+                </div>
+            </nav>
+            <div class="spa-content section">TODO write content</div>
+        </div>
+            
         <script src="public/spa.min.js"></script>
         <script>
             new SPA('home')
