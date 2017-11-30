@@ -1,4 +1,3 @@
-require('dotenv').load();
 var express = require('express');
 var router = express.Router();
 var ctrlReviews = require('./review.controller');

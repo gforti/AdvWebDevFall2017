@@ -98,7 +98,7 @@
                 myHeaders.set('Content-Type', 'application/json');
                 const token = window.localStorage.getItem('token');
                 if (token) {
-                    myHeaders.set('Authorization', 'Bearer ${token}');
+                    myHeaders.set('Authorization', `Bearer ${token}`);
                 }
                 let myInit = { method: verb,                                
                                headers: myHeaders,
